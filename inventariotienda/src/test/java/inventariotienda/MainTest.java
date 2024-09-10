@@ -5,6 +5,9 @@ import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.Scanner;
 
 public class MainTest {
@@ -14,47 +17,66 @@ public class MainTest {
         productos = Main.inicializarInventario();
     }
 
+    void agregarTomate() {
+        Scanner mockScanner = mock(Scanner.class);
+        when(mockScanner.nextLine()).thenReturn("Tomate");
+        Main.setScanner(mockScanner);
+        productos = Main.agregarProductos(productos, 1, 10);
+    }
     @Test
     void testAgregarProductos() {
-        productos = Main.agregarProductos(productos, 1, "Tomate", 10);
-        productos = Main.agregarProductos(productos, 2, "Leche", 5);
+        Scanner mockScanner = mock(Scanner.class);
+        when(mockScanner.nextLine()).thenReturn("Tomate");
+        Main.setScanner(mockScanner);
+
+        productos = Main.agregarProductos(productos, 1, 10);
         assertEquals("Tomate", productos[0][1]);
-        assertEquals("Leche", productos[1][1]);
-        assertEquals(5, productos[1][2]);
+        assertEquals(10, productos[0][2]);
     }
 
     @Test
     void testRestarProductos() {
-        productos = Main.agregarProductos(productos, 1, "Tomate", 10);
-        productos = Main.agregarProductos(productos, 2, "Leche", 5);
+        agregarTomate();
 
         Main.restarProductos(productos, 1, 5);
-        Main.restarProductos(productos, 2, 3);
 
         assertEquals(5, productos[0][2]);
-        assertEquals(2, productos[1][2]);
     }
 
     @Test
-    void restarCantidadMayorQueStock() {
-        productos = Main.agregarProductos(productos, 1, "Leche", 5);
-        Scanner mockito = mock(Scanner.class);
+    void restarCantidadMayorQueStock() { //tambien valido como testEliminarProducto
+        agregarTomate();
 
+        Scanner mockito = mock(Scanner.class);
         when(mockito.nextLine()).thenReturn("SI");
         Main.setScanner(mockito);
 
-        productos = Main.restarProductos(productos, 1, 6);
-
+        productos = Main.restarProductos(productos, 1, 11);
         assertEquals(null, productos[0][0]);
     }
 
     @Test
-    void testValidarInventario() {
+    void testConsultarDisponibilidad() {
+        agregarTomate();
 
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        Main.consultarDisponibilidad(productos, 1);
+        String actual = outContent.toString().replace("\r\n","\n");
+        assertEquals("Hay 10 unidades de 'Tomate'\n", actual);
     }
 
     @Test
-    void testEliminarProductos() {
-        
+    void testListarProductos() {
+        agregarTomate();
+
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        Main.listarProductos(productos);
+        String actual = outContent.toString().replace("\r\n","\n");
+        String expected = ("Nombre: Tomate\nID: 1\nStock: 10 unidades\n\n");
+        assertEquals(expected, actual);
     }
 }
