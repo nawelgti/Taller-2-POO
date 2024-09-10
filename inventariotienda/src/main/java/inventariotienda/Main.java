@@ -22,14 +22,33 @@ public class Main {
 
         int resp = leerRespuestaINT();
         if (resp == 1) {
+            System.out.println("Ingrese el nombre del producto:");
             String nombre = leerRespuestaSTRING();
+            System.out.println("Ingrese el ID del producto:");
             int id = leerRespuestaINT();
-            int cant = leerRespuestaINT();
+            System.out.println("Ingrese la cantidad de unidades: ");
+            int cant = leerRespuestaINT()
             agregarProductos(productos, id, nombre, cant);
         }
-        if (resp == 2) {
+        else if (resp == 2) {
             System.out.println("Ingrese el ID del producto:");
-            String id = leerRespuestaSTRING();
+            int id = leerRespuestaINT();
+            System.out.println("Cantidad de unidades a restar: ");
+            int cant = leerRespuestaINT();
+            restarProductos(productos, id, cant);
+        }
+        else if (resp == 3) {
+            System.out.println("Ingrese el ID del producto:");
+            int id = leerRespuestaINT();
+            eliminarProductos(productos, id);
+        }
+        else if (resp == 4) {
+            System.out.println("Ingrese el ID del producto:");
+            int id = leerRespuestaINT();
+            consultarDisponibilidad(productos, id);
+        }
+        else if (resp == 5) {
+            listarProductos(productos);
         }
     }
 
@@ -86,6 +105,27 @@ public class Main {
         return productos;
     }
 
+    public static void consultarDisponibilidad(Object[][] productos, int idProducto) {
+        for (int i=0; i<10; i++) {
+            if (productos[i][0] != null && (productos[i][0]).equals(idProducto)) {
+                int stock = (int)productos[i][2];
+                String nombre = (String)productos[i][1];
+                System.out.println("Hay "+stock+" unidades de '"+nombre+"'");
+            }
+        }
+    }
+
+    public static void listarProductos(Object[][] productos) {
+        for (int i=0; i<10; i++) {
+            if (productos[i][0] != null) {
+                System.out.println("Nombre: "+productos[i][1]);
+                System.out.println("ID: "+productos[i][0]);
+                System.out.println("Stock: "+productos[i][2]+" unidades");
+                System.out.println("");
+            }
+        }
+    }
+
     public static boolean validarInventario(Object[][] productos) {
         boolean validado = false;
         if (productos[9][0] == null) {
@@ -108,7 +148,18 @@ public class Main {
     public static int leerRespuestaINT() {
         @SuppressWarnings("resource")
         Scanner resp = new Scanner(System.in);
-        return Integer.parseInt(resp.nextLine());
+        int n = 0;
+        boolean validado = false;
+        while (!validado) {
+            try {
+                n = Integer.parseInt(resp.nextLine());
+                validado = true;
+            }
+            catch (NumberFormatException e) {
+                System.out.println("Error: Ingrese un numero valido.");
+            }
+        }
+        return n;
     }
 
     public static String leerRespuestaSTRING() {

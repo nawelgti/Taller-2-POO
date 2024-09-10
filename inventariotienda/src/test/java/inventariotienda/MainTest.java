@@ -57,24 +57,4 @@ public class MainTest {
     void testEliminarProductos() {
         
     }
-
-    @Test
-    void testInicializarInventario() {
-        
-    }
-
-    @Test
-    void testLeerRespuestaINT() {
-        
-    }
-
-    @Test
-    void testRestarProductos2() {
-        
-    }
-
-    @Test
-    void testValidarInventario2() {
-        
-    }
 }
