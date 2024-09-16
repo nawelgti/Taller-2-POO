@@ -214,7 +214,6 @@ public class Main {
             System.out.println("¡Es una trampa!\n-10 de vida");
         }
     }
-    public static void victoria() {
-        
-    }
+    public static void victoria() {}
+    public static void hola() {}
 }
