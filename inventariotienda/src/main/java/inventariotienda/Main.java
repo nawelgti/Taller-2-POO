@@ -111,7 +111,7 @@ public class Main {
     }
 
     public static Object[][] eliminarProductos(Object[][] productos, int idProducto) {
-        for (int i=0; i<10; i++) {
+        for (int i=0; i<10;) {
             if (productos[i][0] != null && (productos[i][0]).equals(idProducto)) {
                 productos[i][0] = null;
                 productos[i][1] = null;
